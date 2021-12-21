@@ -1,0 +1,557 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3.1. Representing a game of Go in Python &#8212; Scientific Python QuickStart</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Part 3.Greater than the sum of its parts" href="Part3.html" />
+    <link rel="prev" title="Chapter 3. Implementing your first Go bot" href="Part1_Ch3.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/qe-logo-large.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Scientific Python QuickStart</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="Part1.html">
+   Part 1.Foundations
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active has-children">
+    <a class="reference internal" href="Part1_Ch3.html">
+     Chapter 3. Implementing your first Go bot
+    </a>
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul class="current">
+     <li class="toctree-l3 current active">
+      <a class="current reference internal" href="#">
+       3.1. Representing a game of Go in Python
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="Part3.html">
+   Part 3.Greater than the sum of its parts
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Part3_App_B.html">
+     App B.The backpropagation algorithm
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://livebook.manning.com/book/deep-learning-and-the-game-of-go/about-this-book/">
+   https://livebook.manning.com/book/deep-learning-and-the-game-of-go/about-this-book/
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="about_py.html">
+   About Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="getting_started.html">
+   Setting up Your Python Environment
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_by_example.html">
+   An Introductory Example
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="learn_more.html">
+   Learn More
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/docs/Part1_Ch3.1.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/quantecon-mini-example/master?urlpath=tree/mini_book/docs/Part1_Ch3.1.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#implementing-the-go-board">
+   3.1.1. Implementing the Go board
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tracking-connected-groups-of-stones-in-go-strings">
+   3.1.2. Tracking connected groups of stones in Go: strings
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="representing-a-game-of-go-in-python">
+<h1>3.1. Representing a game of Go in Python<a class="headerlink" href="#representing-a-game-of-go-in-python" title="Permalink to this headline">¶</a></h1>
+<p>The game of Go is played on a square board. Usually, beginners start playing on a 9 × 9 or 13 × 13 board, and advanced and pro players play on a 19 × 19 board. But in principle, Go can be played on a board of any size. Implementing a square grid for the game is fairly simple, but you’ll need to take care of a lot of intricacies down the line.</p>
+<p>You represent a Go game in Python by building a module we’ll call dlgo step-by-step. Throughout the chapter, you’ll be asked to create files and implement classes and functions that will eventually lead to your first bot. All the code from this and later chapters can be found on GitHub at <a class="reference external" href="http://mng.bz/gYPe">http://mng.bz/gYPe</a>.</p>
+<p>Although you should definitely clone this repository for reference, we strongly encourage you to follow along by creating the files from scratch to see how the library builds up piece by piece. The master branch of our GitHub repository contains all the code used in this book (and more). From this chapter on, there’s additionally a specific Git branch for each chapter that has only the code you need for the given chapter. For instance, the code for this chapter can be found in branch chapter_3. The next chapters follow the same naming convention. Note that we’ve included extensive tests for most of the code found here and in later chapters in the GitHub repository.</p>
+<p>To build a Python library to represent Go, you need a data model that’s flexible enough to support a few use cases:</p>
+<ul class="simple">
+<li><p>Track the progress of a game you’re playing against a human opponent.</p></li>
+<li><p>Track the progress of a game between two bots. This might seem to be exactly the same as the preceding point, but as it turns out, a few subtle differences exist. Most notably, naive bots have a hard time recognizing when the game is over. Playing two simple bots against each other is an important technique used in later chapters, so it’s worth calling out here.</p></li>
+<li><p>Compare many prospective sequences from the same board position.</p></li>
+<li><p>Import game records and generate training data from them.</p></li>
+</ul>
+<p>First, create a new folder, dlgo, and place an empty _<em>init</em>_.py file into it to initiate it as a Python module. Also, create two additional files called <a class="reference external" href="http://gotypes.py">gotypes.py</a> and goboard_slow.py in which you’ll put all board- and game-play functionality. Your folder structure at this point should look as follows:</p>
+<p><strong>dlgo</strong><br />
+<span class="math notranslate nohighlight">\(~~~~~~\)</span> __<strong>init</strong>__.<span class="math notranslate nohighlight">\(\color{brown}{\text{py}}\)</span>
+<br />
+<span class="math notranslate nohighlight">\(~~~~~~\)</span> <strong>gotypes</strong>.<span class="math notranslate nohighlight">\(\color{brown}\text{py}\)</span><br />
+<span class="math notranslate nohighlight">\(~~~~~~\)</span> <strong>goboard_slow</strong>.<span class="math notranslate nohighlight">\(\color{brown}\text{py}\)</span></p>
+<p>Black and white players take turns in Go, and you use <code class="docutils literal notranslate"><span class="pre">enum</span></code> to represent the different-colored stones. A <code class="docutils literal notranslate"><span class="pre">Player</span></code> is either <code class="docutils literal notranslate"><span class="pre">black</span></code> or <code class="docutils literal notranslate"><span class="pre">white</span></code>. After a player places a stone, you can switch the color by calling the <code class="docutils literal notranslate"><span class="pre">other</span></code> method on a <code class="docutils literal notranslate"><span class="pre">Player</span></code> instance. Put this <code class="docutils literal notranslate"><span class="pre">Player</span></code> class into <a class="reference external" href="http://gotypes.py">gotypes.py</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.1. Using an enum to represent players</span>
+
+<span class="kn">import</span> <span class="nn">enum</span>
+
+
+<span class="k">class</span> <span class="nc">Player</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    &gt;&gt;&gt; Player.black.value</span>
+<span class="sd">    1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">black</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">white</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">other</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Player</span><span class="o">.</span><span class="n">black</span> <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">Player</span><span class="o">.</span><span class="n">white</span> <span class="k">else</span> <span class="n">Player</span><span class="o">.</span><span class="n">white</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As noted in the front matter, we’re using Python 3 for this book. One of the reasons is that many modern aspects of the language, such as enums in <a class="reference external" href="http://gotypes.py">gotypes.py</a>, are part of the standard library in Python 3.</p>
+<p>Next, to represent coordinates on the board, tuples are an obvious choice. The following <code class="docutils literal notranslate"><span class="pre">Point</span></code> class also goes into <a class="reference external" href="http://gotypes.py">gotypes.py</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.2. Using tuples to represent points of a Go board</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+
+<span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;row col&#39;</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    &gt;&gt;&gt; p=Point(1,col=2)</span>
+<span class="sd">    &gt;&gt;&gt; p</span>
+<span class="sd">    Point(row=1, col=2)</span>
+<span class="sd">    &gt;&gt;&gt; p.row</span>
+<span class="sd">    1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">Point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">col</span><span class="p">),</span>
+            <span class="n">Point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">col</span><span class="p">),</span>
+            <span class="n">Point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">Point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">namedtuple</span></code> lets you access the coordinates as point.row and point.col instead of <code class="docutils literal notranslate"><span class="pre">point[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">point[1]</span></code>, which makes for much better readability.</p>
+<p>You also need a structure to represent the actions a player can take on a turn. Normally, a turn involves placing a stone on the board, but a player can also pass or resign at any time. Following American Go Association (AGA) conventions, we use the term move to mean any of those three actions, whereas a play refers to placing a stone. In the <code class="docutils literal notranslate"><span class="pre">Move</span></code> class, you therefore encode all three types of move (play, pass, resign) and make sure a move has precisely one of these types. For actual plays, you need to pass a <code class="docutils literal notranslate"><span class="pre">Point</span></code> to be placed. You add this <code class="docutils literal notranslate"><span class="pre">Move</span></code> class to the file goboard_slow.py.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.3. Setting moves: plays, passes, or resigns</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">dlgo.gotypes</span> <span class="kn">import</span> <span class="n">Player</span>
+
+<span class="k">class</span> <span class="nc">Move</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">is_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">is_resign</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        It&#39;s a bitwise XOR (exclusive OR).</span>
+<span class="sd">        It results to true if one (and only one) of the operands (evaluates to) true.</span>
+<span class="sd">        &gt;&gt;&gt; 0^0</span>
+<span class="sd">        0</span>
+<span class="sd">        &gt;&gt;&gt; 1^1</span>
+<span class="sd">        0</span>
+<span class="sd">        &gt;&gt;&gt; 1^0</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; 0^1</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; 0^1^0</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; 0^1^1</span>
+<span class="sd">        0</span>
+<span class="sd">        &gt;&gt;&gt; bin(8)</span>
+<span class="sd">        &#39;0b1000&#39;</span>
+<span class="sd">        &gt;&gt;&gt; bin(3)</span>
+<span class="sd">        &#39;0b11&#39;</span>
+<span class="sd">        &gt;&gt;&gt; bin(11)</span>
+<span class="sd">        &#39;0b1011&#39;</span>
+<span class="sd">        &gt;&gt;&gt; 8^3</span>
+<span class="sd">        11</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">point</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="o">^</span> <span class="n">is_pass</span> <span class="o">^</span> <span class="n">is_resign</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point</span> <span class="o">=</span> <span class="n">point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_play</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_pass</span> <span class="o">=</span> <span class="n">is_pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_resign</span> <span class="o">=</span> <span class="n">is_resign</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Move</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">point</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">pass_turn</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Move</span><span class="p">(</span><span class="n">is_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">resign</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Move</span><span class="p">(</span><span class="n">is_resign</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In what follows, clients generally won’t call the <code class="docutils literal notranslate"><span class="pre">Move</span></code> constructor directly. Instead, you usually call <code class="docutils literal notranslate"><span class="pre">Move.play</span></code>, <code class="docutils literal notranslate"><span class="pre">Move.pass_turn</span></code>, or <code class="docutils literal notranslate"><span class="pre">Move.resign</span></code> to construct an instance of a move.</p>
+<p>Note that so far, the <code class="docutils literal notranslate"><span class="pre">Player</span></code>, <code class="docutils literal notranslate"><span class="pre">Point</span></code>, and <code class="docutils literal notranslate"><span class="pre">Move</span></code> classes are all plain data types. Although they’re fundamental to representing the board, they don’t contain any game logic. This is done on purpose, and you’ll benefit from separating game-play concerns like this.</p>
+<p>Next, you implement classes that can update the game state by using the preceding three classes:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Board</span></code> class is responsible for the logic of placing and capturing stones.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">GameState</span></code> class includes all the stones of the board, as well as tracking whose turn it is and what the previous state was.</p></li>
+</ul>
+<div class="section" id="implementing-the-go-board">
+<h2>3.1.1. Implementing the Go board<a class="headerlink" href="#implementing-the-go-board" title="Permalink to this headline">¶</a></h2>
+<p>Before turning to <code class="docutils literal notranslate"><span class="pre">GameState</span></code>, let’s first implement the Board class. Your first idea might be to create a 19 × 19 array tracking the state of each point in the board, and that’s a good starting point. Now, think about the algorithm for checking when you need to remove stones from the board. Recall that the number of liberties of a single stone is defined by the number of empty points in its direct neighborhood. If all four neighboring points are occupied by an enemy stone, the stone has no liberties left and is captured. For larger groups of connected stones, the situation is more difficult to check. For instance, after placing a black stone, you have to check all neighboring white stones to see whether black captured any stones that you have to remove. Specifically, you have to check the following:</p>
+<ol class="simple">
+<li><p>You see whether any neighbors have any liberties left.</p></li>
+<li><p>You check whether any of the neighbors’ neighbors have any liberties left.</p></li>
+<li><p>You examine the neighbors’ neighbors’ neighbors, and so forth.
+This procedure could require hundreds of steps to finish. Imagine a long chain snaking through the opponent’s territory on a board with 200 moves played already. To speed this up, you can explicitly track all directly connected stones as a unit.</p></li>
+</ol>
+</div>
+<div class="section" id="tracking-connected-groups-of-stones-in-go-strings">
+<h2>3.1.2. Tracking connected groups of stones in Go: strings<a class="headerlink" href="#tracking-connected-groups-of-stones-in-go-strings" title="Permalink to this headline">¶</a></h2>
+<p>You saw in the preceding section that viewing stones in isolation can lead to an increased computational complexity. Instead, you’ll keep track of groups of connected stones of the same color <code class="docutils literal notranslate"><span class="pre">and</span> <span class="pre">their</span> <span class="pre">liberties</span></code> at the same time. Doing so is much more efficient when implementing game logic.</p>
+<p>You call a group of connected stones of the same color a <code class="docutils literal notranslate"><span class="pre">string</span> <span class="pre">of</span> <span class="pre">stones</span></code>, or simply a string, as shown in figure 3.1. You can build this structure efficiently with the Python <code class="docutils literal notranslate"><span class="pre">set</span></code> type as in the following <code class="docutils literal notranslate"><span class="pre">GoString</span></code> implementation, which you also put into goboard_slow.py.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.4. Encoding strings of stones with `set`</span>
+<span class="k">class</span> <span class="nc">GoString</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; liberties=[8]</span>
+<span class="sd">    &gt;&gt;&gt; g=GoString(&#39;w&#39;,&#39;abc&#39;,liberties)</span>
+<span class="sd">    &gt;&gt;&gt; g.remove_liberty(8)</span>
+<span class="sd">    &gt;&gt;&gt; g.num_liberties</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; g.remove_liberty(8)</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">        ...</span>
+<span class="sd">    KeyError: 8</span>
+<span class="sd">    </span>
+<span class="sd">    Furthermore, note the merged_with method of GoString, which is called when a player connects two of its groups by placing a stone.</span>
+<span class="sd">    &gt;&gt;&gt; len(g.merged_with(g).liberties)</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; g.add_liberty(9)</span>
+<span class="sd">    &gt;&gt;&gt; g.liberties</span>
+<span class="sd">    {9}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">stones</span><span class="p">,</span> <span class="n">liberties</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stones</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stones</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">liberties</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">liberties</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">remove_liberty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">liberties</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_liberty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">liberties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">merged_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">go_string</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">go_string</span><span class="o">.</span><span class="n">color</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span>
+        <span class="n">combined_stones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stones</span> <span class="o">|</span> <span class="n">go_string</span><span class="o">.</span><span class="n">stones</span>
+        <span class="k">return</span> <span class="n">GoString</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">combined_stones</span><span class="p">,</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">liberties</span> <span class="o">|</span> <span class="n">go_string</span><span class="o">.</span><span class="n">liberties</span><span class="p">)</span> <span class="o">-</span> <span class="n">combined_stones</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_liberties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">liberties</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">GoString</span><span class="p">)</span> <span class="ow">and</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">color</span> <span class="ow">and</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">stones</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">stones</span> <span class="ow">and</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">liberties</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">liberties</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Figure 3.1. In this Go game, black has three strings of stones, and white has two. The large white string has six liberties, and the single white stone has only three.</strong></p>
+ <p align="center">
+     <img src="https://drek4537l1klr.cloudfront.net/pumperla/Figures/03fig01.jpg" alt="string">
+</p><p>Note that <code class="docutils literal notranslate"><span class="pre">GoString</span></code> directly tracks its own liberties, and you can access the number of liberties at any point by calling <code class="docutils literal notranslate"><span class="pre">num_liberties</span></code>, which is much more efficient than the preceding naive approach starting from individual stones.</p>
+<p>Also, you have the ability to add and remove liberties from the given string by using <code class="docutils literal notranslate"><span class="pre">remove_liberty</span></code> and <code class="docutils literal notranslate"><span class="pre">add_liberty</span></code>. Liberties of a string will usually decrease when opponents play next to this string, and increase when this or another group captures opposing stones adjacent to this string.</p>
+<p>Furthermore, note the <code class="docutils literal notranslate"><span class="pre">merged_with</span></code> method of <code class="docutils literal notranslate"><span class="pre">GoString</span></code>, which is called when a player connects two of its groups by placing a stone.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doctest</span>
+<span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TestResults(failed=0, attempted=21)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="Part1_Ch3.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Chapter 3. Implementing your first Go bot</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="Part3.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Part 3.Greater than the sum of its parts</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Thomas J. Sargent and John Stachurski<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

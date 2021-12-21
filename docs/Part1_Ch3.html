@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Part 1.Foundations &#8212; Scientific Python QuickStart</title>
+    <title>Chapter 3. Implementing your first Go bot &#8212; Scientific Python QuickStart</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -42,8 +42,6 @@
     <script src="../_static/copybutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe"
@@ -53,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Part 3.Greater than the sum of its parts" href="Part3.html" />
-    <link rel="prev" title="Deep Learning and the Game of Go" href="index.html" />
+    <link rel="next" title="3.1. Representing a game of Go in Python" href="Part1_Ch3.1.html" />
+    <link rel="prev" title="Part 1.Foundations" href="Part1.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -92,27 +90,56 @@
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="Part1.html">
    Part 1.Foundations
   </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active has-children">
+    <a class="current reference internal" href="#">
+     Chapter 3. Implementing your first Go bot
+    </a>
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Part1_Ch3.1.html">
+       3.1. Representing a game of Go in Python
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="Part3.html">
    Part 3.Greater than the sum of its parts
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="Part3_App_B.html">
-     Part 3.Greater than the sum of its parts
+     App B.The backpropagation algorithm
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://livebook.manning.com/book/deep-learning-and-the-game-of-go/about-this-book/">
+   https://livebook.manning.com/book/deep-learning-and-the-game-of-go/about-this-book/
+  </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="about_py.html">
@@ -217,31 +244,6 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#chapter-3-implementing-your-first-go-bot">
-   Chapter 3. Implementing your first Go bot
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#this-chapter-covers">
-     This chapter covers
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#representing-a-game-of-go-in-python">
-     3.1. Representing a game of Go in Python
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -250,44 +252,21 @@
         
               <div>
                 
-  <div class="section" id="part-1-foundations">
-<h1>Part 1.Foundations<a class="headerlink" href="#part-1-foundations" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="chapter-3-implementing-your-first-go-bot">
-<h2>Chapter 3. Implementing your first Go bot<a class="headerlink" href="#chapter-3-implementing-your-first-go-bot" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="this-chapter-covers">
-<h3>This chapter covers<a class="headerlink" href="#this-chapter-covers" title="Permalink to this headline">¶</a></h3>
+  <div class="section" id="chapter-3-implementing-your-first-go-bot">
+<h1>Chapter 3. Implementing your first Go bot<a class="headerlink" href="#chapter-3-implementing-your-first-go-bot" title="Permalink to this headline">¶</a></h1>
+<p>This chapter covers</p>
 <ul class="simple">
-<li><p>Implementing a Go board by using Python
-<br></p></li>
+<li><p>Implementing a Go board by using Python</p></li>
 <li><p>Placing sequences of stones and simulating a game</p></li>
 <li><p>Encoding Go rules for this board to ensure legal moves are played</p></li>
 <li><p>Building a simple bot that can play against a copy of itself</p></li>
-<li><p>Playing a full game against your bot</p></li>
+<li><p>Playing a full game against your bot
+In this chapter, you’ll build a flexible library that provides data structures to represent Go games and algorithms that enforce the Go rules. As you saw in the preceding chapter, the rules of Go are simple, but in order to implement them on a computer, you have to consider all the edge cases carefully. If you’re a novice to the game of Go or need a refresher of the rules, make sure you’ve read chapter 2. This chapter is technical and requires a good working knowledge of the Go rules to fully appreciate the details.</p></li>
 </ul>
-<p>In this chapter, you’ll build a flexible library that provides data structures to represent Go games and algorithms that enforce the Go rules. As you saw in the preceding chapter, the rules of Go are simple, but in order to implement them on a computer, you have to consider all the edge cases carefully. If you’re a novice to the game of Go or need a refresher of the rules, make sure you’ve read chapter 2. This chapter is technical and requires a good working knowledge of the Go rules to fully appreciate the details.</p>
 <p>Representing the Go rules is immensely important, because it’s the foundation for creating smart bots. Your bot needs to understand legal and illegal moves before you can teach it good and bad moves.</p>
 <p>At the end of this chapter, you’ll have implemented your first Go bot. This bot is still weak but has all the knowledge about the game of Go it needs to evolve into much stronger versions in the following chapters.</p>
 <p>You’ll start by formally introducing the board and fundamental concepts used to play a game of Go with a computer: what is a player, a stone, or a move? Next, you’ll be concerned with game-play aspects. How can a computer quickly check which stones need to be captured or when the ko rule applies? When and how does a game come to an end? We’ll answer all these questions throughout this chapter.</p>
-</div>
-<div class="section" id="representing-a-game-of-go-in-python">
-<h3>3.1. Representing a game of Go in Python<a class="headerlink" href="#representing-a-game-of-go-in-python" title="Permalink to this headline">¶</a></h3>
-<p>The game of Go is played on a square board. Usually, beginners start playing on a 9 × 9 or 13 × 13 board, and advanced and pro players play on a 19 × 19 board. But in principle, Go can be played on a board of any size. Implementing a square grid for the game is fairly simple, but you’ll need to take care of a lot of intricacies down the line.</p>
-<p>You represent a Go game in Python by building a module we’ll call dlgo step-by-step. Throughout the chapter, you’ll be asked to create files and implement classes and functions that will eventually lead to your first bot. All the code from this and later chapters can be found on GitHub at <a class="reference external" href="http://mng.bz/gYPe">http://mng.bz/gYPe</a>.</p>
-<p>Although you should definitely clone this repository for reference, we strongly encourage you to follow along by creating the files from scratch to see how the library builds up piece by piece. The master branch of our GitHub repository contains all the code used in this book (and more). From this chapter on, there’s additionally a specific Git branch for each chapter that has only the code you need for the given chapter. For instance, the code for this chapter can be found in branch chapter_3. The next chapters follow the same naming convention. Note that we’ve included extensive tests for most of the code found here and in later chapters in the GitHub repository.</p>
-<p>To build a Python library to represent Go, you need a data model that’s flexible enough to support a few use cases:</p>
-<ul class="simple">
-<li><p>Track the progress of a game you’re playing against a human opponent.</p></li>
-<li><p>Track the progress of a game between two bots. This might seem to be exactly the same as the preceding point, but as it turns out, a few subtle differences exist. Most notably, naive bots have a hard time recognizing when the game is over. Playing two simple bots against each other is an important technique used in later chapters, so it’s worth calling out here.</p></li>
-<li><p>Compare many prospective sequences from the same board position.</p></li>
-<li><p>Import game records and generate training data from them.</p></li>
-</ul>
-<p>First, create a new folder, dlgo, and place an empty _<em>init</em>_.py file into it to initiate it as a Python module. Also, create two additional files called <a class="reference external" href="http://gotypes.py">gotypes.py</a> and goboard_slow.py in which you’ll put all board- and game-play functionality. Your folder structure at this point should look as follows:</p>
-<p><strong>dlgo</strong><br />
-<span class="math notranslate nohighlight">\(~~~~~~\)</span> __<strong>init</strong>__.<span class="math notranslate nohighlight">\(\color{brown}{\text{py}}\)</span>
-<br />
-<span class="math notranslate nohighlight">\(~~~~~~\)</span> <strong>gotypes</strong>.<span class="math notranslate nohighlight">\(\color{brown}\text{py}\)</span><br />
-<span class="math notranslate nohighlight">\(~~~~~~\)</span> <strong>goboard_slow</strong>.<span class="math notranslate nohighlight">\(\color{brown}\text{py}\)</span></p>
-</div>
+<div class="toctree-wrapper compound">
 </div>
 </div>
 
@@ -316,17 +295,17 @@
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="Part1.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Deep Learning and the Game of Go</p>
+            <p class="prev-next-title">Part 1.Foundations</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="Part3.html" title="next page">
+    <a class='right-next' id="next-link" href="Part1_Ch3.1.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Part 3.Greater than the sum of its parts</p>
+        <p class="prev-next-title">3.1. Representing a game of Go in Python</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
