@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App B.The backpropagation algorithm &#8212; Scientific Python QuickStart</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="About Python" href="about_py.html" />
+    <link rel="prev" title="Part 3.Greater than the sum of its parts" href="Part3.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/qe-logo-large.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Scientific Python QuickStart</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Part1_Ch3.html">
+   Part 1.Foundations
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="Part3.html">
+   Part 3.Greater than the sum of its parts
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     App B.The backpropagation algorithm
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="about_py.html">
+   About Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="getting_started.html">
+   Setting up Your Python Environment
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="python_by_example.html">
+   An Introductory Example
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="learn_more.html">
+   Learn More
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/docs/Part3_App_B.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/quantecon-mini-example/master?urlpath=tree/mini_book/docs/Part3_App_B.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   App B.The backpropagation algorithm
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-bit-of-notation">
+     A bit of notation
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-backpropagation-algorithm-for-feed-forward-networks">
+     <strong>
+      The backpropagation algorithm for feed-forward networks
+     </strong>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#backpropagation-for-sequential-neural-networks">
+   Backpropagation for sequential neural networks
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#backpropagation-for-neural-networks-in-general">
+   Backpropagation for neural networks in general
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#computational-challenges-with-backpropagation">
+   Computational challenges with backpropagation
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="app-b-the-backpropagation-algorithm">
+<h1>App B.The backpropagation algorithm<a class="headerlink" href="#app-b-the-backpropagation-algorithm" title="Permalink to this headline">¶</a></h1>
+<p>Chapter 5 introduced sequential neural networks and feed-forward networks in particular. We briefly talked about the <strong>backpropagation algorithm</strong>, which is used to train neural networks. This appendix explains in a bit more detail how to arrive at the gradients and parameter updates that we simply stated and used in chapter 5.</p>
+<p>We’ll first derive the backpropagation algorithm for feed-forward neural networks and then discuss how to extend the algorithm to more-general sequential and nonsequential networks. Before going deeper into the math, let’s define our setup and introduce notation that will help along the way.</p>
+<div class="section" id="a-bit-of-notation">
+<h2>A bit of notation<a class="headerlink" href="#a-bit-of-notation" title="Permalink to this headline">¶</a></h2>
+<p>In this section, you’ll work with a feed-forward neural network with <span class="math notranslate nohighlight">\({l} \)</span> layers. Each of the <span class="math notranslate nohighlight">\({l}\)</span> layers has a sigmoid activation function. Weights of the <span class="math notranslate nohighlight">\({i}\)</span> th layer are referred to as <span class="math notranslate nohighlight">\({W^i}\)</span> , and bias terms by <span class="math notranslate nohighlight">\(b^i\)</span> . You use <span class="math notranslate nohighlight">\(x\)</span> to denote a mini-batch of size <span class="math notranslate nohighlight">\(k\)</span> of input data to the network, and <span class="math notranslate nohighlight">\(y\)</span> to indicate the output of it. It’s safe to think of both <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> as vectors here, but all operations carry over to mini-batches. Moreover, we introduce the following notation:</p>
+<ul class="simple">
+<li><p>We indicate the output of the <span class="math notranslate nohighlight">\(i\)</span> th layer with activation <span class="math notranslate nohighlight">\(y^{i+1}\)</span> ; that is, <span class="math notranslate nohighlight">\(y^{i+1} = s(W^iy^i + b^i\)</span> ). Note that <span class="math notranslate nohighlight">\(y^{i+1}\)</span> is also the <strong>input</strong> to layer <span class="math notranslate nohighlight">\(i +1\)</span>.</p></li>
+<li><p>We indicate the output of the <em>i</em> th dense layer without activation as <span class="math notranslate nohighlight">\(z^i\)</span>; that is, <span class="math notranslate nohighlight">\(z^i = W^i · y^i + b^i\)</span>.</p></li>
+<li><p>Introducing this convenient way of writing intermediate output, you can now write <span class="math notranslate nohighlight">\(z^i = W^i · y^i + b^i\)</span> and <span class="math notranslate nohighlight">\(y^{i+1} = s(z^i)\)</span>. Note that with this notation, you could also write the output as <span class="math notranslate nohighlight">\(y = y^l\)</span> and the input as <span class="math notranslate nohighlight">\(x = y^0\)</span>, but we won’t use this notation in what follows.</p></li>
+<li><p>As a last piece of notation, we’ll sometimes write <span class="math notranslate nohighlight">\(f^i(y^i)\)</span> for <span class="math notranslate nohighlight">\(s(W^iy^i + b^i)\)</span>.</p></li>
+</ul>
+</div>
+<div class="section" id="the-backpropagation-algorithm-for-feed-forward-networks">
+<h2><strong>The backpropagation algorithm for feed-forward networks</strong><a class="headerlink" href="#the-backpropagation-algorithm-for-feed-forward-networks" title="Permalink to this headline">¶</a></h2>
+<p>Following the preceding conventions, the forward pass for the ith layer of your neural network can now be written as follows:</p>
+<p><span class="math notranslate nohighlight">\(y^{i+1} = σ(W^iy^i + b^i) = f^i \: o \: y^i\)</span></p>
+<p>You can use this definition recursively for each layer to write your predictions like this:</p>
+<p><span class="math notranslate nohighlight">\(y = f^n o ··· o f^1(x)\)</span></p>
+<p>Because you compute your loss function <strong>Loss</strong> from predictions <strong>y</strong> and labels <strong>ŷ</strong>, you can split the loss function in a similar fashion:</p>
+<p><span class="math notranslate nohighlight">\(Loss(y,ŷ) = Loss \: o \: f^n o ··· o f^1(x)\)</span></p>
+<p>Computing and using the derivative of the loss function as shown here is done by a smart application of the <strong>chain rule</strong> for functions, a fundamental result from multivariable calculus. Directly applying the chain rule to the preceding formula yields this:
+<span class="math notranslate nohighlight">\( 
+    \frac{dLoss}{dx}=\frac{dLoss}{df^n}·\frac{df^n}{df^{n-1}}···\frac{df^2}{df^1}·\frac{df^1}{dx}\)</span>
+Now, you define the delta of the <em>i</em> th layer as follows:</p>
+<p><span class="math notranslate nohighlight">\(\Delta^i=\frac{dLoss}{df^n}···\frac{df^{i+1}}{df^i}\)</span></p>
+<p>Then you can express deltas in a similar fashion to the previous <strong>forward pass</strong>, which you call the backward pass—namely, by the following relationship:</p>
+<p><span class="math notranslate nohighlight">\(
+    \Delta^i=\Delta^{i+1}\frac{df^{i+1}}{df^i}\)</span>
+Note that for deltas, the indices go down, as you pass backward through the computation. Formally, computing the backward pass is structurally equivalent to the simple forward pass. You’ll now proceed to explicitly computing the actual derivatives involved. Derivatives of both sigmoid and affine linear functions with respect to their input are quickly derived:</p>
+<p><span class="math notranslate nohighlight">\(
+    \omicron^`(x)=\frac{d\omicron}{dx}=\omicron(x)(1-\omicron(x)) \)</span>
+<span class="math notranslate nohighlight">\(
+    \frac{d(Wx+b)}{dx}=W\)</span>
+Using these last two equations, you can now write down how to propagate back the error term <span class="math notranslate nohighlight">\(D^{i+1}\)</span> of the (<em>i + 1</em>)th layer to the <em>i</em> th layer:</p>
+<p><span class="math notranslate nohighlight">\(\Delta^i=(W^i)^T·(\Delta^{i+1}) \: \odot \: \omicron^`(z^i))\)</span></p>
+<p>In this formula, the superscript T denotes matrix transposition. The ⊙, or <strong>Hadamard product</strong>, indicates element-wise multiplication of the two vectors. The preceding computation splits into two parts, one for the dense layer and one for the activation:</p>
+<p><span class="math notranslate nohighlight">\(\Delta^i=(w^i)^T·(\Delta^{i+1})\odot\omicron^`(z^i)\Delta^i=(W^i)^T·\Delta^\omicron\)</span></p>
+<p>The last step is to compute the gradients of your parameters Wi and bi for every layer. Now that you have Di readily computed, you can immediately read off parameter gradients from there:</p>
+<p><span class="math notranslate nohighlight">\(
+    \Delta W^i=\frac{dLoss}{dW^i}=\Delta^i·(y^i)^\Tau\)</span>
+<span class="math notranslate nohighlight">\(
+\Delta b^i=\frac{dLoss}{db^i}=\Delta^i\)</span></p>
+<p>With these error terms, you can update your neural network parameters as you wish, meaning with any optimizer or update rule you like.</p>
+</div>
+</div>
+<div class="section" id="backpropagation-for-sequential-neural-networks">
+<h1>Backpropagation for sequential neural networks<a class="headerlink" href="#backpropagation-for-sequential-neural-networks" title="Permalink to this headline">¶</a></h1>
+<p>In general, sequential neural networks can have more-interesting layers than what we’ve discussed so far. For instance, you could be concerned with convolutional layers, as described in <a class="reference external" href="https://livebook.manning.com/book/deep-learning-and-the-game-of-go/chapter-6/ch06">chapter 6</a>, or other activation functions, such as the softmax activation discussed in chapter 6 as well. Regardless of the actual layers in a sequential network, backpropagation follows the same general outline. If <span class="math notranslate nohighlight">\({g^i}\)</span> denotes the forward pass without activation, and <span class="math notranslate nohighlight">\({Act^i}\)</span> denotes the respective activation function, propagating <span class="math notranslate nohighlight">\(Δ^{i+1}\)</span> to the <em>i</em> th layer requires you to compute the following transition:</p>
+<p><span class="math notranslate nohighlight">\(
+    \Delta^i=\frac{dAct^i}{dg^i}(z^i)\frac{dg^i}{dz^i}(y^i)\Delta^{i+1}\)</span>
+You need to compute the derivative of the activation function evaluated at the intermediate output <span class="math notranslate nohighlight">\(z^i\)</span> and the derivative of the layer function <span class="math notranslate nohighlight">\(g^i\)</span> with respect to the input of the <em>i</em> th layer. Knowing all the deltas, you can usually quickly deduce gradients for all parameters involved in the layer, just as you did for weights and bias terms in the feed-forward layer. Seen this way, each layer knows how to pass data forward and propagate an error backward, without explicitly knowing anything about the structure of the surrounding layers.</p>
+</div>
+<div class="section" id="backpropagation-for-neural-networks-in-general">
+<h1>Backpropagation for neural networks in general<a class="headerlink" href="#backpropagation-for-neural-networks-in-general" title="Permalink to this headline">¶</a></h1>
+<p>In this book, we’re concerned solely with sequential neural networks, but it’s still interesting to discuss what happens when you move away from the sequentiality constraint. In a nonsequential network, a layer has multiple outputs, multiple inputs, or both.</p>
+<p>Let’s say a layer has <strong>m</strong> outputs. A prototypical example might be to split up a vector into <strong>m</strong> parts. Locally for this layer, the forward pass can be split into <strong>k separate</strong> functions. On the backward pass, the derivative of each of these functions can be computed separately as well, and each derivative contributes equally to the delta that’s being passed on to the previous layer.</p>
+<p>In the situation that we have to deal with, <strong>n</strong> inputs and one output, the situation is somewhat reversed. The forward pass is computed from <strong>n</strong> input components by means of a single function that outputs a single value. On the backward pass, you receive one delta from the next layer and have to compute <strong>n</strong> output deltas to pass on to each one of the incoming <strong>n</strong> layers. Those derivatives can be computed independently of each other, evaluated at each of the respective inputs.</p>
+<p>The general case of <strong>n</strong> inputs and <strong>m</strong> outputs works by combining the two previous steps. Each neural network, no matter how complicated the setup or how many layers in total, locally looks like this.</p>
+</div>
+<div class="section" id="computational-challenges-with-backpropagation">
+<h1>Computational challenges with backpropagation<a class="headerlink" href="#computational-challenges-with-backpropagation" title="Permalink to this headline">¶</a></h1>
+<p>You could argue that backpropagation is just a simple application of the chain rule to a specific class of machine-learning algorithms. Although on a theoretical level it may be seen like this, in practice there’s a lot to consider when implementing backpropagation.</p>
+<p>Most notably, to compute deltas and gradient updates for any layer, you have to have the respective inputs of the forward pass ready for evaluation. If you simply discard results from the forward pass, you have to recompute them on the backward pass. Thus, you’d do well by caching those values in an efficient way. In your implementation from scratch in chapter 5, each layer persisted its own state, for input and output data, as well as for input and output deltas. Building networks that rely on processing massive amounts of data, you should make sure to have an implementation in place that’s both computationally efficient and has a low memory footprint.</p>
+<p>Another related, interesting consideration is that of reusing intermediate values. For instance, we’ve argued that in the simple case of a feed-forward network, we can either see affine linear transformation and sigmoid activation as a unit or split them into two layers. The output of the affine linear transformation is needed to compute the backward pass of the activation function, so you should keep that intermediate information from the forward pass. On the other hand, because the sigmoid function doesn’t have parameters, you compute the backward pass in one go:</p>
+<p><span class="math notranslate nohighlight">\(\Delta^i=(W^i)^T(\Delta^{i+1} \odot (z^i))\)</span></p>
+<p>This might computationally be more efficient than doing it in two steps. Automatically detecting which operations can be carried out together can bring a lot of speed gains. In more-complicated situations (such as that of recurrent neural networks, in which a layer will essentially compute a <strong>loop</strong> with inputs from the last step), managing intermediate state becomes even more important.</p>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="Part3.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Part 3.Greater than the sum of its parts</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="about_py.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">About Python</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Thomas J. Sargent and John Stachurski<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
