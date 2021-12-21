@@ -250,6 +250,19 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#self-capture">
+   3.2.1. Self-capture
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -260,16 +273,107 @@
                 
   <div class="section" id="capturing-game-state-and-checking-for-illegal-moves">
 <h1>3.2. Capturing game state and checking for illegal moves<a class="headerlink" href="#capturing-game-state-and-checking-for-illegal-moves" title="Permalink to this headline">¶</a></h1>
+<p>Now that you’ve implemented the rules for placing and capturing stones on a <code class="docutils literal notranslate"><span class="pre">Board</span></code>, let’s move on to playing games by capturing the current state of a game in a <code class="docutils literal notranslate"><span class="pre">GameState</span></code> class. Roughly speaking, <strong>game state</strong> knows about the board position, the next player, the previous game state, and the last move that has been played. What follows is just the beginning of the definition. You’ll add more functionality to <code class="docutils literal notranslate"><span class="pre">GameState</span></code> throughout this section. Again, you put this into goboard_slow.py.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.10. Encoding game state for a game of Go</span>
+<span class="k">class</span> <span class="nc">GameState</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    &gt;&gt;&gt; from dlgo.goboard_fast import Move,GoString,Board,GameState</span>
+<span class="sd">    &gt;&gt;&gt; g=get_game_state()</span>
+<span class="sd">    &gt;&gt;&gt; gg=g.new_game(19)</span>
+<span class="sd">    &gt;&gt;&gt; isinstance(gg,GameState)</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">next_player</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">move</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="n">board</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_player</span> <span class="o">=</span> <span class="n">next_player</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">previous_state</span> <span class="o">=</span> <span class="n">previous</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_move</span> <span class="o">=</span> <span class="n">move</span>
+
+    <span class="k">def</span> <span class="nf">apply_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">move</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">move</span><span class="o">.</span><span class="n">is_play</span><span class="p">:</span>
+            <span class="n">next_board</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">)</span>
+            <span class="n">next_board</span><span class="o">.</span><span class="n">place_stone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_player</span><span class="p">,</span> <span class="n">move</span><span class="o">.</span><span class="n">point</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">next_board</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">board</span>
+        <span class="k">return</span> <span class="n">GameState</span><span class="p">(</span><span class="n">next_board</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_player</span><span class="o">.</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">move</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">new_game</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">board_size</span><span class="o">=</span><span class="mi">19</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">board_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">board_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">board_size</span><span class="p">,</span> <span class="n">board_size</span><span class="p">)</span>
+        <span class="n">board</span> <span class="o">=</span> <span class="n">Board</span><span class="p">(</span><span class="o">*</span><span class="n">board_size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GameState</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">Player</span><span class="o">.</span><span class="n">black</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>At this point, you can already decide when a game is over by adding the following code to your <code class="docutils literal notranslate"><span class="pre">GameState</span></code> class.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.11. Deciding when a game of Go is over</span>
+<span class="k">def</span> <span class="nf">is_over</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_move</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_move</span><span class="o">.</span><span class="n">is_resign</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">second_last_move</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_state</span><span class="o">.</span><span class="n">last_move</span>
+    <span class="k">if</span> <span class="n">second_last_move</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_move</span><span class="o">.</span><span class="n">is_pass</span> <span class="ow">and</span> <span class="n">second_last_move</span><span class="o">.</span><span class="n">is_pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now that you’ve implemented how to apply a move to the current game state, using apply_move, you should also write code to identify which moves are legal. Humans may accidentally attempt an illegal move. Bots might attempt illegal moves because they don’t know any better. You need to check three rules:</p>
+<ul class="simple">
+<li><p>Confirm that the point you want to play is empty.</p></li>
+<li><p>Check that the move isn’t a self-capture.</p></li>
+<li><p>Confirm that the move doesn’t violate the ko rule.</p></li>
+</ul>
+<p>Although the first point is trivial to implement, the other two deserve separate treatment, because they’re rather tricky to handle properly.</p>
+<div class="section" id="self-capture">
+<h2>3.2.1. Self-capture<a class="headerlink" href="#self-capture" title="Permalink to this headline">¶</a></h2>
+<p>When a string of your stones has only one liberty left and you play at the point that removes that liberty, we call that a <code class="docutils literal notranslate"><span class="pre">self-capture</span></code>. For instance, in figure 3.3, the black stones are doomed.</p>
+<p><strong>Figure 3.3. In this Go board state, the three black stones have one liberty left; namely, the marked point. You enforce the self-capture rule, so black isn’t allowed to play there. White, on the other hand, can capture the three black stones by playing on the marked point.</strong></p>
+<p align="center">
+     <img src="https://drek4537l1klr.cloudfront.net/pumperla/Figures/03fig03.jpg" alt="string">
+</p>
+<p>White can capture them at any time by playing on the marked point, and black has no way to prevent it. But what if black played on the marked point? The entire group would have no liberties and would then be captured. Most rule sets forbid such a play, although a few exceptions exist. Most notably, self-capture is allowed in the quadrennial Ing Cup, which is one of the biggest prizes in international Go.</p>
+<p>You’ll enforce the self-capture rule in your code. This is consistent with the most popular rule sets, and it also reduces the number of moves your bots need to consider. It’s possible to contrive a position where self-capture is the best move, but such situations are basically unheard of in serious games.</p>
+<p>If you alter the surrounding stones in figure 3.3 slightly, you end up with a completely different situation, shown in figure 3.4.</p>
+<p><strong>Figure 3.4. In this situation, the marked point is a capture for black, not suicide, because black will capture two white stones and thereby regain two liberties.</strong></p>
+<p align="center">
+     <img src="https://drek4537l1klr.cloudfront.net/pumperla/Figures/03fig04.jpg" alt="string">
+</p><p>Note that in figure 3.4, and in general, you must remove opponent stones first before checking whether the newly played stone has any liberties. In all rule sets, this next move is a valid capture, not a self-capture, because black will regain two liberties by capturing the two white stones.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">Board</span></code> class does permit self-capture, but in <strong>GameState</strong> you’ll enforce the rule by applying the move to a copy of the board and checking the number of liberties afterward.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.12. Continuing our definition of GameState to enforce the self-capture rule</span>
+<span class="k">def</span> <span class="nf">is_move_self_capture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">move</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">move</span><span class="o">.</span><span class="n">is_play</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">next_board</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">)</span>
+    <span class="n">next_board</span><span class="o">.</span><span class="n">place_stone</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">move</span><span class="o">.</span><span class="n">point</span><span class="p">)</span>
+    <span class="n">new_string</span> <span class="o">=</span> <span class="n">next_board</span><span class="o">.</span><span class="n">get_go_string</span><span class="p">(</span><span class="n">move</span><span class="o">.</span><span class="n">point</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_string</span><span class="o">.</span><span class="n">num_liberties</span> <span class="o">==</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">from</span> <span class="nn">summary</span> <span class="kn">import</span> <span class="n">get_game_state</span>
 <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TestResults(failed=0, attempted=0)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TestResults(failed=0, attempted=4)
 </pre></div>
+</div>
 </div>
 </div>
 </div>
