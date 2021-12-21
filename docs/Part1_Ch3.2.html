@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Part 1.Foundations &#8212; Scientific Python QuickStart</title>
+    <title>3.2. Capturing game state and checking for illegal moves &#8212; Scientific Python QuickStart</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -52,8 +52,8 @@
     <link rel="shortcut icon" href="https://www.alphago-games.com/static/favicon.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Chapter 3. Implementing your first Go bot" href="Part1_Ch3.html" />
-    <link rel="prev" title="Deep Learning and the Game of Go" href="index.html" />
+    <link rel="next" title="Part 3.Greater than the sum of its parts" href="Part3.html" />
+    <link rel="prev" title="3.1. Representing a game of Go in Python" href="Part1_Ch3.1.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -92,7 +92,7 @@
     <div class="bd-toc-item active">
         <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active has-children">
-  <a class="current reference internal" href="#">
+  <a class="reference internal" href="Part1.html">
    Part 1.Foundations
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -100,24 +100,24 @@
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
-   <li class="toctree-l2 has-children">
+  <ul class="current">
+   <li class="toctree-l2 current active has-children">
     <a class="reference internal" href="Part1_Ch3.html">
      Chapter 3. Implementing your first Go bot
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
     <label for="toctree-checkbox-2">
      <i class="fas fa-chevron-down">
      </i>
     </label>
-    <ul>
+    <ul class="current">
      <li class="toctree-l3">
       <a class="reference internal" href="Part1_Ch3.1.html">
        3.1. Representing a game of Go in Python
       </a>
      </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="Part1_Ch3.2.html">
+     <li class="toctree-l3 current active">
+      <a class="current reference internal" href="#">
        3.2. Capturing game state and checking for illegal moves
       </a>
      </li>
@@ -208,7 +208,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/docs/Part1.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/docs/Part1_Ch3.2.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -233,7 +233,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/quantecon-mini-example/master?urlpath=tree/mini_book/docs/Part1.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/quantecon-mini-example/master?urlpath=tree/mini_book/docs/Part1_Ch3.2.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../_static/images/logo_binder.svg"
@@ -250,19 +250,6 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#this-chapter-covers">
-   This chapter covers
-  </a>
- </li>
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -271,24 +258,20 @@
         
               <div>
                 
-  <div class="section" id="part-1-foundations">
-<h1>Part 1.Foundations<a class="headerlink" href="#part-1-foundations" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="this-chapter-covers">
-<h2>This chapter covers<a class="headerlink" href="#this-chapter-covers" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>Implementing a Go board by using Python
-<br></p></li>
-<li><p>Placing sequences of stones and simulating a game</p></li>
-<li><p>Encoding Go rules for this board to ensure legal moves are played</p></li>
-<li><p>Building a simple bot that can play against a copy of itself</p></li>
-<li><p>Playing a full game against your bot</p></li>
-</ul>
-<p>In this chapter, you’ll build a flexible library that provides data structures to represent Go games and algorithms that enforce the Go rules. As you saw in the preceding chapter, the rules of Go are simple, but in order to implement them on a computer, you have to consider all the edge cases carefully. If you’re a novice to the game of Go or need a refresher of the rules, make sure you’ve read chapter 2. This chapter is technical and requires a good working knowledge of the Go rules to fully appreciate the details.</p>
-<p>Representing the Go rules is immensely important, because it’s the foundation for creating smart bots. Your bot needs to understand legal and illegal moves before you can teach it good and bad moves.</p>
-<p>At the end of this chapter, you’ll have implemented your first Go bot. This bot is still weak but has all the knowledge about the game of Go it needs to evolve into much stronger versions in the following chapters.</p>
-<p>You’ll start by formally introducing the board and fundamental concepts used to play a game of Go with a computer: what is a player, a stone, or a move? Next, you’ll be concerned with game-play aspects. How can a computer quickly check which stones need to be captured or when the ko rule applies? When and how does a game come to an end? We’ll answer all these questions throughout this chapter.</p>
+  <div class="section" id="capturing-game-state-and-checking-for-illegal-moves">
+<h1>3.2. Capturing game state and checking for illegal moves<a class="headerlink" href="#capturing-game-state-and-checking-for-illegal-moves" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doctest</span>
+<span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TestResults(failed=0, attempted=0)
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -317,17 +300,17 @@
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="Part1_Ch3.1.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Deep Learning and the Game of Go</p>
+            <p class="prev-next-title">3.1. Representing a game of Go in Python</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="Part1_Ch3.html" title="next page">
+    <a class='right-next' id="next-link" href="Part3.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Chapter 3. Implementing your first Go bot</p>
+        <p class="prev-next-title">Part 3.Greater than the sum of its parts</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

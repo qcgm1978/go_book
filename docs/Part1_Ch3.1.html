@@ -54,7 +54,7 @@
     <link rel="shortcut icon" href="https://www.alphago-games.com/static/favicon.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Part 3.Greater than the sum of its parts" href="Part3.html" />
+    <link rel="next" title="3.2. Capturing game state and checking for illegal moves" href="Part1_Ch3.2.html" />
     <link rel="prev" title="Chapter 3. Implementing your first Go bot" href="Part1_Ch3.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -116,6 +116,11 @@
      <li class="toctree-l3 current active">
       <a class="current reference internal" href="#">
        3.1. Representing a game of Go in Python
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Part1_Ch3.2.html">
+       3.2. Capturing game state and checking for illegal moves
       </a>
      </li>
     </ul>
@@ -260,6 +265,11 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#tracking-connected-groups-of-stones-in-go-strings">
    3.1.2. Tracking connected groups of stones in Go: strings
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#placing-and-capturing-stones-on-a-go-board">
+   3.1.3. Placing and capturing stones on a Go board
   </a>
  </li>
 </ul>
@@ -477,6 +487,143 @@ This procedure could require hundreds of steps to finish. Imagine a long chain s
 </p><p>Note that <code class="docutils literal notranslate"><span class="pre">GoString</span></code> directly tracks its own liberties, and you can access the number of liberties at any point by calling <code class="docutils literal notranslate"><span class="pre">num_liberties</span></code>, which is much more efficient than the preceding naive approach starting from individual stones.</p>
 <p>Also, you have the ability to add and remove liberties from the given string by using <code class="docutils literal notranslate"><span class="pre">remove_liberty</span></code> and <code class="docutils literal notranslate"><span class="pre">add_liberty</span></code>. Liberties of a string will usually decrease when opponents play next to this string, and increase when this or another group captures opposing stones adjacent to this string.</p>
 <p>Furthermore, note the <code class="docutils literal notranslate"><span class="pre">merged_with</span></code> method of <code class="docutils literal notranslate"><span class="pre">GoString</span></code>, which is called when a player connects two of its groups by placing a stone.</p>
+</div>
+<div class="section" id="placing-and-capturing-stones-on-a-go-board">
+<h2>3.1.3. Placing and capturing stones on a Go board<a class="headerlink" href="#placing-and-capturing-stones-on-a-go-board" title="Permalink to this headline">¶</a></h2>
+<p>After having discussed stones and strings of stones, the natural next step is to discuss how to place stones on the board. Using the <code class="docutils literal notranslate"><span class="pre">GoString</span></code> class from listing 3.4, the algorithm for placing a stone looks like this:</p>
+<ol class="simple">
+<li><p>Merge any adjacent strings of the same color.</p></li>
+<li><p>Reduce liberties of any adjacent strings of the opposite color.</p></li>
+<li><p>If any opposite-color strings now have zero liberties, remove them.</p></li>
+</ol>
+<p>Also, if the newly created string has zero liberties, you reject the move. This leads naturally to the following implementation of the Go <code class="docutils literal notranslate"><span class="pre">Board</span></code> class, which you also place at goboard_slow.py. You allow boards to have any number of rows or columns by instantiating them with <code class="docutils literal notranslate"><span class="pre">num_rows</span></code> and <code class="docutils literal notranslate"><span class="pre">num_cols</span></code> appropriately. To keep track of the board state internally, you use the private variable <code class="docutils literal notranslate"><span class="pre">_grid</span></code>, a dictionary you use to store strings of stones. First off, let’s initiate a Go board instance by specifying its size.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.5. Creating a Go Board instance</span>
+<span class="k">class</span> <span class="nc">Board</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    You allow boards to have any number of rows or columns by instantiating them with num_rows and num_cols appropriately</span>
+<span class="sd">    &gt;&gt;&gt; b=Board()</span>
+<span class="sd">    &gt;&gt;&gt; b.num_rows</span>
+<span class="sd">    19</span>
+<span class="sd">    &gt;&gt;&gt; b._grid</span>
+<span class="sd">    {}</span>
+<span class="sd">    &gt;&gt;&gt; isinstance(b._grid,dict)</span>
+<span class="sd">    True</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_rows</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="mi">19</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">num_rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_cols</span> <span class="o">=</span> <span class="n">num_cols</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we discuss the <code class="docutils literal notranslate"><span class="pre">Board</span></code> method to place stones. In <code class="docutils literal notranslate"><span class="pre">place_stone</span></code>, you first have to inspect all neighboring stones of a given point for liberties.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.6. Checking neighboring points for liberties</span>
+<span class="k">def</span> <span class="nf">place_stone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    &gt;&gt;&gt; from dlgo.gotypes import Point</span>
+<span class="sd">    &gt;&gt;&gt; from dlgo.goboard_slow import Board</span>
+<span class="sd">    &gt;&gt;&gt; b=Board()</span>
+<span class="sd">    &gt;&gt;&gt; p=Point(1,col=2)</span>
+<span class="sd">    &gt;&gt;&gt; b.place_stone(&#39;w&#39;,p)</span>
+<span class="sd">    &gt;&gt;&gt; b._grid[p].num_liberties</span>
+<span class="sd">    3</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_on_grid</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="n">adjacent_same_color</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">adjacent_opposite_color</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">liberties</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">point</span><span class="o">.</span><span class="n">neighbors</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_on_grid</span><span class="p">(</span><span class="n">neighbor</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">neighbor_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">neighbor_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">liberties</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">neighbor_string</span><span class="o">.</span><span class="n">color</span> <span class="o">==</span> <span class="n">player</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">neighbor_string</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">adjacent_same_color</span><span class="p">:</span>
+                <span class="n">adjacent_same_color</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor_string</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">neighbor_string</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">adjacent_opposite_color</span><span class="p">:</span>
+                <span class="n">adjacent_opposite_color</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor_string</span><span class="p">)</span>
+    <span class="n">new_string</span> <span class="o">=</span> <span class="n">GoString</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="p">[</span><span class="n">point</span><span class="p">],</span> <span class="n">liberties</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that the first two lines in listing 3.6 use utility methods to check whether the point is within bounds for the given board and that the point hasn’t been played yet. These two methods are defined as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.7. Utility methods for placing and removing stones</span>
+<span class="k">def</span> <span class="nf">is_on_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    &gt;&gt;&gt; from dlgo.gotypes import Point</span>
+<span class="sd">    &gt;&gt;&gt; from dlgo.goboard_slow import Board</span>
+<span class="sd">    &gt;&gt;&gt; b=Board()</span>
+<span class="sd">    &gt;&gt;&gt; p=Point(row=1,col=2)</span>
+<span class="sd">    &gt;&gt;&gt; b.is_on_grid(p)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; b.get_go_string(p)==b._grid.get(p)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; b._grid</span>
+<span class="sd">    {}</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">point</span><span class="o">.</span><span class="n">row</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_rows</span> <span class="ow">and</span> \
+        <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">point</span><span class="o">.</span><span class="n">col</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_cols</span>
+
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">color</span>
+
+<span class="k">def</span> <span class="nf">get_go_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">string</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that you also define <code class="docutils literal notranslate"><span class="pre">get_go_string</span></code> to return the string of stones associated with a given point. This functionality can be helpful in general, but it’s particularly valuable to prevent <code class="docutils literal notranslate"><span class="pre">self-capture</span></code>, which we’ll discuss in more detail in section 3.2.</p>
+<p>Continuing with the definition of <code class="docutils literal notranslate"><span class="pre">place_stone</span></code> in listing 3.6, right after defining <code class="docutils literal notranslate"><span class="pre">new_string</span></code>, you follow the outlined three-step approach shown next.</p>
+<p>Listing 3.8. Continuing our definition of place_stone</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">same_color_string</span> <span class="ow">in</span> <span class="n">adjacent_same_color</span><span class="p">:</span>
+    <span class="n">new_string</span> <span class="o">=</span> <span class="n">new_string</span><span class="o">.</span><span class="n">merged_with</span><span class="p">(</span><span class="n">same_color_string</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">new_string_point</span> <span class="ow">in</span> <span class="n">new_string</span><span class="o">.</span><span class="n">stones</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[</span><span class="n">new_string_point</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_string</span>
+<span class="k">for</span> <span class="n">other_color_string</span> <span class="ow">in</span> <span class="n">adjacent_opposite_color</span><span class="p">:</span>
+    <span class="n">other_color_string</span><span class="o">.</span><span class="n">remove_liberty</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">other_color_string</span> <span class="ow">in</span> <span class="n">adjacent_opposite_color</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">other_color_string</span><span class="o">.</span><span class="n">num_liberties</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remove_string</span><span class="p">(</span><span class="n">other_color_string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, the only thing missing in our definition of a Go board is how to remove a string of stones, as required in <code class="docutils literal notranslate"><span class="pre">remove_string</span></code> in the last line of listing 3.8. This is fairly simple, as shown in listing 3.9, but you have to keep in mind that other stones might gain liberties when removing an enemy string. For instance, in figure 3.2, you can see that black can capture a white stone, thereby gaining one additional liberty for each black string of stones.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.9. Continuing our definition of place_stone</span>
+<span class="k">def</span> <span class="nf">_remove_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">stones</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">point</span><span class="o">.</span><span class="n">neighbors</span><span class="p">():</span>
+            <span class="n">neighbor_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">neighbor_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">neighbor_string</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">string</span><span class="p">:</span>
+                <span class="n">neighbor_string</span><span class="o">.</span><span class="n">add_liberty</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[</span><span class="n">point</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Figure 3.2. Black can capture a white stone, thereby regaining a liberty for each of the Go strings adjacent to the captured stone.</strong></p>
+<p><img alt="gain liberties by capture" src="https://drek4537l1klr.cloudfront.net/pumperla/Figures/03fig02_alt.jpg" /></p>
+<p>This definition concludes our <code class="docutils literal notranslate"><span class="pre">Board</span></code> implementation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doctest</span>
@@ -485,7 +632,7 @@ This procedure could require hundreds of steps to finish. Imagine a long chain s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TestResults(failed=0, attempted=21)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TestResults(failed=0, attempted=38)
 </pre></div>
 </div>
 </div>
@@ -525,10 +672,10 @@ This procedure could require hundreds of steps to finish. Imagine a long chain s
             <p class="prev-next-title">Chapter 3. Implementing your first Go bot</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="Part3.html" title="next page">
+    <a class='right-next' id="next-link" href="Part1_Ch3.2.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Part 3.Greater than the sum of its parts</p>
+        <p class="prev-next-title">3.2. Capturing game state and checking for illegal moves</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
