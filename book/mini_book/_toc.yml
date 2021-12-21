@@ -1,7 +1,11 @@
 format: jb-book
 root: docs/index
 chapters:
-- file: docs/Part1_Ch3
+- file: docs/Part1
+  sections:
+  - file: docs/Part1_Ch3
+    sections:
+    - file: docs/Part1_Ch3.1
 - file: docs/Part3
   sections:
   - file: docs/Part3_App_B

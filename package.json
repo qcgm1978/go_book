@@ -4,7 +4,7 @@
   "description": "A short example showing how to write a lecture series using Jupyter Book 2.0.",
   "main": "index.js",
   "scripts": {
-    "start":"jupyter-book build ./book/mini_book",
+    "start":"jupyter-book build ./book/mini_book/ & exit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

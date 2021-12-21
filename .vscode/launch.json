@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Module",
-            "type": "node",
+            "command": "npm start",
+            "name": "Run npm start",
             "request": "launch",
-            "module": "jupyter-book build ./book/mini_book"
+            "type": "node-terminal"
         }
     ]
 }
