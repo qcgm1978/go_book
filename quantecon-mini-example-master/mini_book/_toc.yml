@@ -1,0 +1,12 @@
+format: jb-article
+root: docs/index
+chapters:
+- file: docs/Part1_Ch3
+- file: docs/Part3
+  sections:
+  - file: docs/Part3_App_B
+- url: https://livebook.manning.com/book/deep-learning-and-the-game-of-go/about-this-book/
+- file: docs/about_py
+- file: docs/getting_started
+- file: docs/python_by_example
+- file: docs/learn_more
