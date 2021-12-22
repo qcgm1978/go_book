@@ -383,7 +383,39 @@
 <p id="figure3-6"><strong>Figure 3.6. Continuing, black tries to rescue its two stones by capturing the isolated white stone.</strong></p>
 <p align="center">
      <img src="https://drek4537l1klr.cloudfront.net/pumperla/Figures/03fig06.jpg" alt="string">
-</p><div class="cell docutils container">
+</p><p>But white can immediately play at the same point that was played in <span class="xref myst">figure 3.5</span>, as shown in <a class="reference internal" href="#figure3-7"><span class="std std-ref">figure 3.7</span></a>.</p>
+<p>You can see that white can immediately recapture the three black stones, and the ko rule doesn’t apply, because the overall board positions in <a class="reference internal" href="#figure3-5"><span class="std std-ref">figures 3.5</span></a> and <a class="reference internal" href="#figure3-7"><span class="std std-ref">3.7</span></a> are different. This play is known as a snapback. In simple situations, the ko rule boils down to not being able to immediately recapture a stone. But snapbacks are common, and the existence of such positions shows that you have to be careful when implementing ko.</p>
+<p id="figure3-7"><strong>Figure 3.7. In this situation, white can just snap back (retake the three black stones) without violating the ko rule.</strong></p>
+<p align="center">
+     <img src="https://drek4537l1klr.cloudfront.net/pumperla/Figures/03fig07.jpg" alt="string">
+</p><p>You can specify the ko rule in many ways, but those ways are practically equivalent except in rare situations. The rule you’ll enforce in your code is that a player may not play a stone that would re-create a previous game state, where the game state includes both the stones on the board and the player whose turn is next. This particular formulation is known as the <code class="docutils literal notranslate"><span class="pre">situational</span> <span class="pre">superko</span></code> rule.</p>
+<p>Because each <code class="docutils literal notranslate"><span class="pre">GameState</span></code> instance keeps a pointer to the previous state, you can enforce the ko rule by walking back up the tree and checking the new state against the whole history. You do so by adding the following method to your <code class="docutils literal notranslate"><span class="pre">GameState</span></code> implementation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listing 3.13. Does the current game state violate the ko rule?</span>
+<span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">situation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_player</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">does_move_violate_ko</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">move</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">move</span><span class="o">.</span><span class="n">is_play</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">next_board</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">)</span>
+    <span class="n">next_board</span><span class="o">.</span><span class="n">place_stone</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">move</span><span class="o">.</span><span class="n">point</span><span class="p">)</span>
+    <span class="n">next_situation</span> <span class="o">=</span> <span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">other</span><span class="p">,</span> <span class="n">next_board</span><span class="p">)</span>
+    <span class="n">past_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_state</span>
+    <span class="k">while</span> <span class="n">past_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">past_state</span><span class="o">.</span><span class="n">situation</span> <span class="o">==</span> <span class="n">next_situation</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">past_state</span> <span class="o">=</span> <span class="n">past_state</span><span class="o">.</span><span class="n">previous_state</span>
+    <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This implementation is simple and correct, but it’s relatively slow. For each move, you create a deep copy of the board state and have to compare this state against all previous states, which adds up over time. In <span class="xref myst">section 3.5</span>, you’ll encounter an interesting technique to speed up this step.</p>
+<p>To wrap up your GameState definition, you can now decide whether a move is valid by using knowledge from <a class="reference internal" href="#section3-2"><span class="std std-ref">section 3.2</span></a> about both ko and self-capture.</p>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">from</span> <span class="nn">summary</span> <span class="kn">import</span> <span class="n">get_game_state</span>
