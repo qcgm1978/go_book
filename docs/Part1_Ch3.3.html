@@ -144,7 +144,12 @@
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="simple">
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Part2_Ch4.html">
+     Chapter 4. Playing games with tree search
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
@@ -250,6 +255,23 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/quantecon-mini-example/master?urlpath=tree/mini_book/docs/Part1_Ch3.3.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
@@ -265,15 +287,25 @@
                 
   <div class="section" id="ending-a-game">
 <h1>3.3. Ending a game<a class="headerlink" href="#ending-a-game" title="Permalink to this headline">¶</a></h1>
-<p>A key concept in computer Go is self-play. In self-play, you usually start with a weak Go-playing agent, have it play against itself, and use the game results to build a stronger bot. In <span class="xref myst">chapter 4</span>, you’ll use self-play to evaluate board positions. In chapters 9 through 12, you’ll use self-play to evaluate individual moves and the algorithms that selected them.</p>
+<p>A key concept in computer Go is self-play. In self-play, you usually start with a weak Go-playing agent, have it play against itself, and use the game results to build a stronger bot. In <a class="reference internal" href="Part2_Ch4.html#chapter-4"><span class="std std-ref">chapter 4</span></a>, you’ll use self-play to evaluate board positions. In chapters 9 through 12, you’ll use self-play to evaluate individual moves and the algorithms that selected them.</p>
 <p>To take advantage of this technique, you need to make sure your self-play games end. Human games end when neither player can gain an advantage with their next move. This is a tricky concept even for humans. Beginners often end games by playing hopeless moves in the opponent’s territory, or watching their opponent cut into what they believed to be solid territory. For computers, it’s even more difficult. If our bot continues playing as long as legal moves remain available, it’ll eventually fill up its own liberties and lose all of its stones.</p>
 <p>You could think up some heuristics to help the bot finish the game in a sensible manner. For example:</p>
-<p>Don’t play in a region that’s completely surrounded by stones of the same color.
-Don’t play a stone that would have only one liberty.
-Always capture an opposing stone with only one liberty.
-Unfortunately, all of those rules are too strict. If our bots followed these rules, strong opponents would take advantage to kill groups that should live, rescue groups that should die, or simply gain a better position. Generally, our handcrafted rules should restrict the bot’s options as little as possible, so that more sophisticated algorithms are free to learn the advanced tactics.</p>
+<ul class="simple">
+<li><p>Don’t play in a region that’s completely surrounded by stones of the same color.</p></li>
+<li><p>Don’t play a stone that would have only one liberty.</p></li>
+<li><p>Always capture an opposing stone with only one liberty.</p></li>
+</ul>
+<p>Unfortunately, <strong>all of those rules are too strict</strong>. If our bots followed these rules, strong opponents would take advantage to kill groups that should live, rescue groups that should die, or simply gain a better position. Generally, our handcrafted rules should restrict the bot’s options as little as possible, so that more sophisticated algorithms are free to learn the advanced tactics.</p>
 <p>To solve this problem, you can look to the history of the game. In ancient times, the winner was simply the player with the most stones on the board. Players would end the game by filling every point they could, leaving only eyes for their groups empty. This could make the end of a game drag out for a long time, so players came up with a way to speed it up. If black clearly controlled a region of the board (any white stone played there would eventually get captured), there was no need for black to fill that region with stones. The players would just agree to count that area for black. This is where the concept of territory came from, and over centuries the rules evolved so that territory was counted explicitly.</p>
 <p>Scoring in this method avoids the question of what is territory and what isn’t, but you still have to prevent your bot from killing its own stones; see figure 3.8.</p>
+<p><strong>Figure 3.8. White has two eyes in the corner, at A and B, and shouldn’t place a stone at either point. Otherwise, black can capture the whole group. Your naive bot won’t be allowed to fill its own eye.</strong></p>
+<p align="center">
+     <img src="https://drek4537l1klr.cloudfront.net/pumperla/Figures/03fig08.jpg" alt="string">
+</p><p>You’ll hardcode a rule that prevents the bot from filling in its own eyes, under the strictest possible definition. For our purposes, an <strong>eye</strong> is an empty point where all adjacent points and at least three out of four diagonally adjacent points are filled with friendly stones.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Experienced Go players may notice that the preceding definition of <strong>eye</strong> will miss a valid eye in some cases. We’ll accept those errors to keep the implementation simple.</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
