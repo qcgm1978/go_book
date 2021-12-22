@@ -101,6 +101,11 @@
    </i>
   </label>
   <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Part1_Ch2.html">
+     Chapter 2. Go as a machine-learning problem
+    </a>
+   </li>
    <li class="toctree-l2 current active has-children">
     <a class="reference internal" href="Part1_Ch3.html">
      Chapter 3. Implementing your first Go bot
@@ -260,6 +265,11 @@
    3.2.1. Self-capture
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ko">
+   3.2.2. Ko
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -362,6 +372,10 @@
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="ko">
+<h2>3.2.2. Ko<a class="headerlink" href="#ko" title="Permalink to this headline">¶</a></h2>
+<p>Having checked for self-capture, you can now move on to implement the ko rule. Chapter 2 briefly covered ko and its importance in the game of Go. Roughly speaking, the ko rule applies if a move would return the board to the exact previous position. This doesn’t imply that a player can’t hit back immediately, as the following sequence of diagrams shows. In figure 3.5, white has just played the isolated stone on the bottom. Black’s two stones now have only a single liberty left—but so does this white stone.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doctest</span>
