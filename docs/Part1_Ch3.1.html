@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3.1. Representing a game of Go in Python &#8212; Scientific Python QuickStart</title>
+    <title>3.1. 3.1. Representing a game of Go in Python &#8212; Scientific Python QuickStart</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,8 +54,8 @@
     <link rel="shortcut icon" href="https://www.alphago-games.com/static/favicon.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3.2. Capturing game state and checking for illegal moves" href="Part1_Ch3.2.html" />
-    <link rel="prev" title="Chapter 3. Implementing your first Go bot" href="Part1_Ch3.html" />
+    <link rel="next" title="3.2. 3.2. Capturing game state and checking for illegal moves" href="Part1_Ch3.2.html" />
+    <link rel="prev" title="3. Chapter 3. Implementing your first Go bot" href="Part1_Ch3.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -92,10 +92,25 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Part 1
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
   <a class="reference internal" href="Part1.html">
-   Part 1.Foundations
+   1. Part 1.Foundations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Part1_Ch2.html">
+   2. Chapter 2. Go as a machine-learning problem
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="Part1_Ch3.html">
+   3. Chapter 3. Implementing your first Go bot
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -103,71 +118,22 @@
    </i>
   </label>
   <ul class="current">
-   <li class="toctree-l2 current active has-children">
-    <a class="reference internal" href="Part1_Ch3.html">
-     Chapter 3. Implementing your first Go bot
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     3.1. 3.1. Representing a game of Go in Python
     </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul class="current">
-     <li class="toctree-l3 current active">
-      <a class="current reference internal" href="#">
-       3.1. Representing a game of Go in Python
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="Part1_Ch3.2.html">
-       3.2. Capturing game state and checking for illegal moves
-      </a>
-     </li>
-    </ul>
    </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="Part3.html">
-   Part 3.Greater than the sum of its parts
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="Part3_App_B.html">
-     App B.The backpropagation algorithm
+    <a class="reference internal" href="Part1_Ch3.2.html">
+     3.2. 3.2. Capturing game state and checking for illegal moves
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Part1_Ch3.3.html">
+     3.3. 3.3. Ending a game
     </a>
    </li>
   </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference external" href="https://livebook.manning.com/book/deep-learning-and-the-game-of-go/about-this-book/">
-   https://livebook.manning.com/book/deep-learning-and-the-game-of-go/about-this-book/
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="about_py.html">
-   About Python
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="getting_started.html">
-   Setting up Your Python Environment
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="python_by_example.html">
-   An Introductory Example
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="learn_more.html">
-   Learn More
-  </a>
  </li>
 </ul>
 
@@ -259,17 +225,17 @@
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#implementing-the-go-board">
-   3.1.1. Implementing the Go board
+   3.1.1. 3.1.1. Implementing the Go board
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#tracking-connected-groups-of-stones-in-go-strings">
-   3.1.2. Tracking connected groups of stones in Go: strings
+   3.1.2. 3.1.2. Tracking connected groups of stones in Go: strings
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#placing-and-capturing-stones-on-a-go-board">
-   3.1.3. Placing and capturing stones on a Go board
+   3.1.3. 3.1.3. Placing and capturing stones on a Go board
   </a>
  </li>
 </ul>
@@ -284,7 +250,7 @@
               <div>
                 
   <div class="section" id="representing-a-game-of-go-in-python">
-<h1>3.1. Representing a game of Go in Python<a class="headerlink" href="#representing-a-game-of-go-in-python" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">3.1. </span>3.1. Representing a game of Go in Python<a class="headerlink" href="#representing-a-game-of-go-in-python" title="Permalink to this headline">¶</a></h1>
 <p>The game of Go is played on a square board. Usually, beginners start playing on a 9 × 9 or 13 × 13 board, and advanced and pro players play on a 19 × 19 board. But in principle, Go can be played on a board of any size. Implementing a square grid for the game is fairly simple, but you’ll need to take care of a lot of intricacies down the line.</p>
 <p>You represent a Go game in Python by building a module we’ll call dlgo step-by-step. Throughout the chapter, you’ll be asked to create files and implement classes and functions that will eventually lead to your first bot. All the code from this and later chapters can be found on GitHub at <a class="reference external" href="http://mng.bz/gYPe">http://mng.bz/gYPe</a>.</p>
 <p>Although you should definitely clone this repository for reference, we strongly encourage you to follow along by creating the files from scratch to see how the library builds up piece by piece. The master branch of our GitHub repository contains all the code used in this book (and more). From this chapter on, there’s additionally a specific Git branch for each chapter that has only the code you need for the given chapter. For instance, the code for this chapter can be found in branch chapter_3. The next chapters follow the same naming convention. Note that we’ve included extensive tests for most of the code found here and in later chapters in the GitHub repository.</p>
@@ -414,7 +380,7 @@
 <li><p>The <code class="docutils literal notranslate"><span class="pre">GameState</span></code> class includes all the stones of the board, as well as tracking whose turn it is and what the previous state was.</p></li>
 </ul>
 <div class="section" id="implementing-the-go-board">
-<h2>3.1.1. Implementing the Go board<a class="headerlink" href="#implementing-the-go-board" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.1.1. </span>3.1.1. Implementing the Go board<a class="headerlink" href="#implementing-the-go-board" title="Permalink to this headline">¶</a></h2>
 <p>Before turning to <code class="docutils literal notranslate"><span class="pre">GameState</span></code>, let’s first implement the Board class. Your first idea might be to create a 19 × 19 array tracking the state of each point in the board, and that’s a good starting point. Now, think about the algorithm for checking when you need to remove stones from the board. Recall that the number of liberties of a single stone is defined by the number of empty points in its direct neighborhood. If all four neighboring points are occupied by an enemy stone, the stone has no liberties left and is captured. For larger groups of connected stones, the situation is more difficult to check. For instance, after placing a black stone, you have to check all neighboring white stones to see whether black captured any stones that you have to remove. Specifically, you have to check the following:</p>
 <ol class="simple">
 <li><p>You see whether any neighbors have any liberties left.</p></li>
@@ -424,7 +390,7 @@ This procedure could require hundreds of steps to finish. Imagine a long chain s
 </ol>
 </div>
 <div class="section" id="tracking-connected-groups-of-stones-in-go-strings">
-<h2>3.1.2. Tracking connected groups of stones in Go: strings<a class="headerlink" href="#tracking-connected-groups-of-stones-in-go-strings" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.1.2. </span>3.1.2. Tracking connected groups of stones in Go: strings<a class="headerlink" href="#tracking-connected-groups-of-stones-in-go-strings" title="Permalink to this headline">¶</a></h2>
 <p>You saw in the preceding section that viewing stones in isolation can lead to an increased computational complexity. Instead, you’ll keep track of groups of connected stones of the same color <code class="docutils literal notranslate"><span class="pre">and</span> <span class="pre">their</span> <span class="pre">liberties</span></code> at the same time. Doing so is much more efficient when implementing game logic.</p>
 <p>You call a group of connected stones of the same color a <code class="docutils literal notranslate"><span class="pre">string</span> <span class="pre">of</span> <span class="pre">stones</span></code>, or simply a string, as shown in figure 3.1. You can build this structure efficiently with the Python <code class="docutils literal notranslate"><span class="pre">set</span></code> type as in the following <code class="docutils literal notranslate"><span class="pre">GoString</span></code> implementation, which you also put into goboard_slow.py.</p>
 <div class="cell docutils container">
@@ -489,7 +455,7 @@ This procedure could require hundreds of steps to finish. Imagine a long chain s
 <p>Furthermore, note the <code class="docutils literal notranslate"><span class="pre">merged_with</span></code> method of <code class="docutils literal notranslate"><span class="pre">GoString</span></code>, which is called when a player connects two of its groups by placing a stone.</p>
 </div>
 <div class="section" id="placing-and-capturing-stones-on-a-go-board">
-<h2>3.1.3. Placing and capturing stones on a Go board<a class="headerlink" href="#placing-and-capturing-stones-on-a-go-board" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.1.3. </span>3.1.3. Placing and capturing stones on a Go board<a class="headerlink" href="#placing-and-capturing-stones-on-a-go-board" title="Permalink to this headline">¶</a></h2>
 <p>After having discussed stones and strings of stones, the natural next step is to discuss how to place stones on the board. Using the <code class="docutils literal notranslate"><span class="pre">GoString</span></code> class from listing 3.4, the algorithm for placing a stone looks like this:</p>
 <ol class="simple">
 <li><p>Merge any adjacent strings of the same color.</p></li>
@@ -669,13 +635,13 @@ This procedure could require hundreds of steps to finish. Imagine a long chain s
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Chapter 3. Implementing your first Go bot</p>
+            <p class="prev-next-title"><span class="section-number">3. </span>Chapter 3. Implementing your first Go bot</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Part1_Ch3.2.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">3.2. Capturing game state and checking for illegal moves</p>
+        <p class="prev-next-title"><span class="section-number">3.2. </span>3.2. Capturing game state and checking for illegal moves</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
