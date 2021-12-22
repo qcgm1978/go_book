@@ -53,7 +53,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="App B.The backpropagation algorithm" href="Part3_App_B.html" />
-    <link rel="prev" title="3.1. Representing a game of Go in Python" href="Part1_Ch3.1.html" />
+    <link rel="prev" title="Chapter 4. Playing games with tree search" href="Part2_Ch4.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -90,10 +90,25 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Part 1
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
   <a class="reference internal" href="Part1.html">
-   Part 1.Foundations
+   1. Part 1.Foundations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Part1_Ch2.html">
+   2. Chapter 2. Go as a machine-learning problem
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="Part1_Ch3.html">
+   3. Chapter 3. Implementing your first Go bot
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -101,47 +116,64 @@
    </i>
   </label>
   <ul>
-   <li class="toctree-l2 has-children">
-    <a class="reference internal" href="Part1_Ch3.html">
-     Chapter 3. Implementing your first Go bot
+   <li class="toctree-l2">
+    <a class="reference internal" href="Part1_Ch3.1.html">
+     3.1. 3.1. Representing a game of Go in Python
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="Part1_Ch3.1.html">
-       3.1. Representing a game of Go in Python
-      </a>
-     </li>
-    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Part1_Ch3.2.html">
+     3.2. 3.2. Capturing game state and checking for illegal moves
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Part1_Ch3.3.html">
+     3.3. 3.3. Ending a game
+    </a>
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active has-children">
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Part 2
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Part2.html">
+   Part 2. Machine learning and game AI
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Part2_Ch4.html">
+   Chapter 4. Playing games with tree search
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Part 3
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Part 3.Greater than the sum of its parts
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="Part3_App_B.html">
-     App B.The backpropagation algorithm
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://livebook.manning.com/book/deep-learning-and-the-game-of-go/about-this-book/">
-   https://livebook.manning.com/book/deep-learning-and-the-game-of-go/about-this-book/
+  <a class="reference internal" href="Part3_App_B.html">
+   App B.The backpropagation algorithm
   </a>
  </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  To del
+ </span>
+</p>
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="about_py.html">
    About Python
@@ -256,8 +288,6 @@
   <div class="section" id="part-3-greater-than-the-sum-of-its-parts">
 <h1>Part 3.Greater than the sum of its parts<a class="headerlink" href="#part-3-greater-than-the-sum-of-its-parts" title="Permalink to this headline">¶</a></h1>
 <p>At this point, you’ve learned a number of AI techniques that draw from classical tree search, machine learning, and reinforcement learning. Each is powerful on its own, but each also has limitations. To make a truly strong Go AI, you’ll need to combine everything you’ve learned so far. Integrating all these pieces is a serious engineering feat. This part covers the architecture of AlphaGo, the AI that rocked the Go world—and the AI world! To conclude the book, you’ll learn about the elegantly simple design of AlphaGo Zero, the strongest version of AlphaGo to date.</p>
-<div class="toctree-wrapper compound">
-</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -285,11 +315,11 @@
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="Part1_Ch3.1.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="Part2_Ch4.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">3.1. Representing a game of Go in Python</p>
+            <p class="prev-next-title">Chapter 4. Playing games with tree search</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Part3_App_B.html" title="next page">
