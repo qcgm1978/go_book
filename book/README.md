@@ -44,6 +44,4 @@ command:
 
 error: RPC failed; curl 92 HTTP/2 stream 0 was not closed cleanly: INTERNAL_ERROR (err 2)
 
-$ git config --global http.version HTTP/1.1
-After it push was ok and I have changed HTTP version to 2 again:
-$ git config --global http.version HTTP/2
+git config http.postBuffer 524288000
